@@ -1,0 +1,27 @@
+{
+	"compilerOptions": {
+		"target": "es6",
+		"experimentalDecorators": true
+	},
+	"include": [
+		"resources/js"
+	],
+	"extensions": [
+		".vue"
+	],
+	"exclude": [
+		"node_modules",
+		"bower_components",
+		"tmp",
+		"vendor",
+		".git",
+		"dist",
+		"app",
+		"config",
+		"database",
+		"public",
+		"routes",
+		"storage",
+		"test"
+	]
+}
