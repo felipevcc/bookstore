@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Lend;
+use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -29,6 +30,15 @@ class User extends Authenticatable
 	];
 
 	/**
+	 * The accessors to append to the model's array form.
+	 *
+	 * @var array<int, string>
+	 */
+	protected $appends = [
+		'full_name',
+	];
+
+	/**
 	 * The attributes that should be hidden for serialization.
 	 *
 	 * @var array<int, string>
@@ -43,9 +53,10 @@ class User extends Authenticatable
 	 *
 	 * @var array<string, string>
 	 */
-	/* protected $casts = [
-		'email_verified_at' => 'datetime',
-	]; */
+	protected $casts = [
+		'created_at' => 'datetime:Y-m-d',
+		'updated_at' => 'datetime:Y-m-d',
+	];
 
 	/**
 	 * Get all of the lends for the customer user
@@ -65,5 +76,39 @@ class User extends Authenticatable
 	public function ownerLends(): HasMany
 	{
 		return $this->hasMany(Lend::class, 'owner_user_id', 'id');
+	}
+
+	/**
+	 * Mutator
+	 * Set the user's password hashed
+	 *
+	 * @param  string  $value
+	 * @return void
+	 */
+	public function setPasswordAttribute($value)
+	{
+		$this->attributes['password'] = bcrypt($value);
+	}
+
+	/**
+	 * Mutator
+	 * Set the user's remember token
+	 *
+	 * @return void
+	 */
+	public function setRememberTokenAttribute()
+	{
+		$this->attributes['remember_token'] = Str::random(30);
+	}
+
+	/**
+	 * Accessor
+	 * Get the user's full name
+	 *
+	 * @return string
+	 */
+	public function getFullNameAttribute()
+	{
+		return "{$this->name} {$this->last_name}";
 	}
 }
