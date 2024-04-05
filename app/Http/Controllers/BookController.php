@@ -11,7 +11,7 @@ class BookController extends Controller
 	public function index(Request $request)
 	{
 		$books = Book::get();
-		if (!$request->ajax()) return view();
+		if (!$request->ajax()) return view('index', compact('books'));
 		return response()->json(['books' => $books], 200);
 	}
 
