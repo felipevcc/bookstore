@@ -1,5 +1,5 @@
-<x-app title="Biblioteca Central | Home">
-	<section class="my-3 mx-5">
+<x-app title="Inicio">
+	<section class="my-3 d-flex justify-content-center">
 		<h1>Listado de Libros</h1>
 	</section>
 
@@ -13,7 +13,11 @@
 					<p>{{ $book->description }}</p>
 				</div>
 				<div class="card-footer">
-					<button class="btn btn-primary">Solicitar</button>
+					<div class="d-grid gap-2">
+						<button class="btn btn-outline-success" type="button">
+							Solicitar
+						</button>
+					</div>
 				</div>
 			</div>
 		@endforeach
