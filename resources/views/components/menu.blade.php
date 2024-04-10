@@ -46,6 +46,18 @@
 									Usuarios
 								</a>
 							@endrole
+							@role('admin|librarian')
+								{{-- Books --}}
+								<a class="dropdown-item" href="{{ route('books.index') }}">
+									Libros
+								</a>
+							@endrole
+							@can('categories.index')
+								{{-- Categories --}}
+								<a class="dropdown-item" href="{{ route('categories.index') }}">
+									Categorías
+								</a>
+							@endcan
 
 							{{-- Logout --}}
 							<a class="dropdown-item" href="{{ route('logout') }}"

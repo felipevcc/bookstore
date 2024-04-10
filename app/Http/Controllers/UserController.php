@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\User\UserRequest;
 use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
+use App\Http\Requests\User\UserRequest;
 
 class UserController extends Controller
 {
@@ -45,7 +46,12 @@ class UserController extends Controller
 
 	public function update(UserRequest $request, User $user)
 	{
-		$user->update($request->all());
+		$data = $request->all();
+		//Remove password from request if not submitted
+		if (!$request->filled('password')) {
+			unset($data['password'], $data['password_confirmation']);
+		}
+		$user->update($data);
 		$user->syncRoles([$request->role]);
 		if (!$request->ajax()) return back()->with('success', 'User updated successfully');
 		return response()->json([], 204);

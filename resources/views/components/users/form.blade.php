@@ -4,7 +4,9 @@
 
 		<select id="role" type="number" name="role" class="form-control @error('role') is-invalid @enderror">
 			@foreach ($roles as $role)
-				<option value="{{ $role }}">{{ $role }}</option>
+				<option value="{{ $role }}" {{ (isset($user) && $user->hasRole($role)) ? 'selected' : '' }}>
+					{{ $role }}
+				</option>
 			@endforeach
 		</select>
 
