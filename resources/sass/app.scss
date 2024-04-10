@@ -7,6 +7,15 @@
 // Bootstrap
 @import 'bootstrap/scss/bootstrap';
 
+// Icons
+@import '~/@fortawesome/fontawesome-free/scss/fontawesome';
+@import '~/@fortawesome/fontawesome-free/scss/solid';
+
+// Datatable
+@import '~/datatables.net-bs5/css/dataTables.bootstrap5.min';
+
+// Vue select
+@import 'vue-select/dist/vue-select.css';
 
 .card_size {
 	width: 18rem;

@@ -1,9 +1,15 @@
-import './bootstrap';
-import { createApp } from 'vue';
+import './bootstrap'
+import { createApp } from 'vue'
+import vSelect from 'vue-select'
 
-const app = createApp({});
+// Components ---------------------------------------------------
+import TheBookList from './components/Books/TheBookList.vue'
 
-import ExampleComponent from './components/ExampleComponent.vue';
-app.component('example-component', ExampleComponent);
+const app = createApp({
+	components: {
+		TheBookList
+	}
+})
 
-app.mount('#app');
+app.component('v-select', vSelect)
+app.mount('#app')

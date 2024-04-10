@@ -8,10 +8,16 @@ use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
-	public function index(Request $request)
+	public function home()
 	{
 		$books = Book::get();
-		if (!$request->ajax()) return view('index', compact('books'));
+		return view('index', compact('books'));
+	}
+
+	public function index(Request $request)
+	{
+		$books = Book::with('author', 'category')->get();
+		if (!$request->ajax()) return view('books.index', compact('books'));
 		return response()->json(['books' => $books], 200);
 	}
 

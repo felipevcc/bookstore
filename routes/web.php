@@ -19,7 +19,7 @@ use App\Http\Controllers\UserController;
 */
 
 Auth::routes();
-Route::get('/', [BookController::class, 'index']);
+Route::get('/', [BookController::class, 'home'])->name('books.home');
 
 
 // Routes for authenticated users, otherwise return to login
