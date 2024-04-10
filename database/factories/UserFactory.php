@@ -13,20 +13,27 @@ class UserFactory extends Factory
 {
 	protected $model = User::class;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
-    public function definition()
-    {
-        return [
+	/**
+	 * Define the model's default state.
+	 *
+	 * @return array<string, mixed>
+	 */
+	public function definition()
+	{
+		return [
 			'number_id' => $this->faker->randomNumber(9, true),
-            'name' => fake()->name(),
-            'last_name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'password' => '123456789',
-            'remember_token' => Str::random(30),
-        ];
-    }
+			'name' => fake()->name(),
+			'last_name' => fake()->name(),
+			'email' => fake()->unique()->safeEmail(),
+			'password' => '123456789',
+			'remember_token' => Str::random(30),
+		];
+	}
+
+	public function configure()
+	{
+		return $this->afterCreating(function (User $user) {
+			$user->assignRole('user');
+		});
+	}
 }

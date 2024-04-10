@@ -20,18 +20,18 @@ class BookFactory extends Factory
 		]);
 	}
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
-    public function definition()
-    {
-        return [
-            'category_id' => $this->faker->randomElement([1, 2, 3]),
+	/**
+	 * Define the model's default state.
+	 *
+	 * @return array<string, mixed>
+	 */
+	public function definition()
+	{
+		return [
+			'category_id' => $this->faker->randomElement([1, 2, 3]),
 			'title' => $this->faker->sentence(),
 			'stock' => $this->faker->randomDigit(),
 			'description' => $this->faker->paragraph()
-        ];
-    }
+		];
+	}
 }

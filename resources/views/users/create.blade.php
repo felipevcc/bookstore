@@ -7,7 +7,7 @@
 			<div class="card-body">
 				<form action="{{ route('users.store') }}" method="POST">
 					@csrf
-					<x-users.form />
+					<x-users.form :roles="$roles" />
 				</form>
 			</div>
 		</div>

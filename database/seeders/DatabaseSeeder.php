@@ -12,18 +12,19 @@ use Database\Seeders\CategorySeeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     *
-     * @return void
-     */
-    public function run()
-    {
+	/**
+	 * Seed the application's database.
+	 *
+	 * @return void
+	 */
+	public function run()
+	{
 		$this->call([
+			RoleSeeder::class,
 			UserSeeder::class,
 			CategorySeeder::class
 		]);
-        User::factory(10)->create();
+		User::factory(10)->create();
 		Author::factory(20)->create();
-    }
+	}
 }

@@ -5,25 +5,28 @@ namespace App\Http\Controllers;
 use App\Http\Requests\User\UserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
 	public function index(Request $request)
 	{
-		$users = User::get();
+		$users = User::with('roles')->get();
 		if (!$request->ajax()) return view('users.index', compact('users'));
 		return response()->json(['users' => $users], 200);
 	}
 
 	public function create()
 	{
-		return view('users.create');
+		$roles = Role::all()->pluck('name');
+		return view('users.create', compact('roles'));
 	}
 
 	public function store(UserRequest $request)
 	{
 		$user = new User($request->all());
 		$user->save();
+		$user->assignRole($request->role);
 		if (!$request->ajax()) return back()->with('success', 'User created successfully');
 		return response()->json(['status' => 'User created', 'user' => $user], 201);
 	}
@@ -36,12 +39,14 @@ class UserController extends Controller
 
 	public function edit(User $user)
 	{
-		return view('users.edit', compact('user'));
+		$roles = Role::all()->pluck('name');
+		return view('users.edit', compact('user', 'roles'));
 	}
 
 	public function update(UserRequest $request, User $user)
 	{
 		$user->update($request->all());
+		$user->syncRoles([$request->role]);
 		if (!$request->ajax()) return back()->with('success', 'User updated successfully');
 		return response()->json([], 204);
 	}

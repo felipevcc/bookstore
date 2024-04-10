@@ -9,14 +9,14 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class UserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
-    {
-        User::create([
+	/**
+	 * Run the database seeds.
+	 *
+	 * @return void
+	 */
+	public function run()
+	{
+		$user = new User([
 			'number_id' => '1183221111',
 			'name' => 'Felipe',
 			'last_name' => 'Villamizar',
@@ -24,5 +24,7 @@ class UserSeeder extends Seeder
 			'password' => '123456789',
 			'remember_token' => Str::random(10),
 		]);
-    }
+		$user->save();
+		$user->assignRole('admin');
+	}
 }

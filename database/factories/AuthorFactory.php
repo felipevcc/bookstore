@@ -13,18 +13,18 @@ class AuthorFactory extends Factory
 {
 	protected $model = Author::class;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
-    public function definition()
-    {
-        return [
-            'name' => $this->faker->name(),
+	/**
+	 * Define the model's default state.
+	 *
+	 * @return array<string, mixed>
+	 */
+	public function definition()
+	{
+		return [
+			'name' => $this->faker->name(),
 			'biography' => $this->faker->paragraph()
-        ];
-    }
+		];
+	}
 
 	public function configure()
 	{

@@ -20,12 +20,13 @@ use App\Http\Controllers\UserController;
 Auth::routes();
 Route::get('/', [BookController::class, 'index']);
 
-// View after being authenticated
-Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 // Routes for authenticated users, otherwise return to login
 Route::group(['middleware' => ['auth']], function () {
-	Route::group(['prefix' => 'users'], function () {
+	// View after being authenticated
+	Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+	Route::group(['prefix' => 'users', 'middleware' => ['role:admin']], function () {
 		Route::get('/', [UserController::class, 'index'])->name('users.index');
 		Route::get('/create', [UserController::class, 'create'])->name('users.create');
 		Route::post('/', [UserController::class, 'store'])->name('users.store');
