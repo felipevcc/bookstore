@@ -25,5 +25,9 @@
 		"vue": "^3.2.37",
 		"vue-datatables-net": "^2.0.1",
 		"vue-select": "^4.0.0-beta.6"
+	},
+	"dependencies": {
+		"vee-validate": "^4.12.6",
+		"yup": "^1.4.0"
 	}
 }

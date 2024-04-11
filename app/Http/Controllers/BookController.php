@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Book\BookRequest;
+use App\Models\Author;
 use App\Models\Book;
 use Illuminate\Http\Request;
 
@@ -16,8 +17,9 @@ class BookController extends Controller
 
 	public function index(Request $request)
 	{
+		$authors = Author::get();
 		$books = Book::with('author', 'category')->get();
-		if (!$request->ajax()) return view('books.index', compact('books'));
+		if (!$request->ajax()) return view('books.index', compact('books', 'authors'));
 		return response()->json(['books' => $books], 200);
 	}
 
