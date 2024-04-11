@@ -8,7 +8,7 @@
 				</div>
 
 				<!-- Form -->
-				<Form @submit="saveBook" :validation-schema="schema">
+				<Form @submit="saveBook" :validation-schema="schema" ref="form">
 					<div class="modal-body">
 						<section class="row">
 
@@ -117,7 +117,7 @@
 					this.book.author_id = this.author
 					await axios.post('/books', this.book)
 					await Swal.fire('success', 'Felicidades')
-					window.location.reload()
+					this.$parent.closeModal()
 				} catch (error) {
 					console.error(error)
 				}
@@ -131,6 +131,13 @@
 					console.error(error)
 				}
 			},
+			reset() {
+				this.is_create= true
+				this.book= {}
+				this.author= null
+				this.category= null
+				this.$refs.form.resetForm()
+			}
 		}
 	}
 </script>
