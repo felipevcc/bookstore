@@ -18,9 +18,8 @@ class RoleAndPermissionSeeder extends Seeder
 		// Permissions
 		$permissionsLibrarian = [
 			'books.index',
-			'books.create',
+			'books.show',
 			'books.store',
-			'books.edit',
 			'books.update',
 			'books.destroy',
 			'categories.index',

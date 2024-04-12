@@ -23,32 +23,23 @@
 								<td>{{ book.category.name }}</td>
 								<td>{{ book.stock }}</td>
 								<td>
-									<button class="btn btn-primary">hola</button>
-								</td>
-
-								<!-- <td>
 									<div class="d-flex justify-content-center">
-										<a href="{{ route('users.edit', ['user' => $user->id]) }}" class="btn btn-warning btn-sm">
+										<button type="button" class="btn btn-warning btn-sm" title="Editar" @click="editBook(book)">
 											<i class="fa-solid fa-pencil"></i>
-										</a>
-										<form action="{{ route('users.destroy', ['user' => $user->id]) }}" method="post">
-											@csrf
-											@method('DELETE')
-											<button class="ms-2 btn btn-danger btn-sm">
-												<i class="fa-solid fa-trash-can"></i>
-											</button>
-										</form>
+										</button>
+										<button type="button" class="btn btn-danger btn-sm ms-2" title="Eliminar" @click="deleteBook(book)">
+											<i class="fa-solid fa-trash-can"></i>
+										</button>
 									</div>
-								</td> -->
+								</td>
 							</tr>
-
 						</tbody>
 					</table>
 				</div>
 			</div>
 
 			<div>
-				<book-modal :authors_data="authors_data" ref="book_modal" />
+				<book-modal :authors_data="authors_data" :book_data="book" ref="book_modal" />
 			</div>
 		</div>
 	</section>
@@ -56,6 +47,7 @@
 
 <script>
 	import BookModal from './BookModal.vue'
+	import { deleteMessage, successMessage } from '@/helpers/Alerts.js'
 
 	export default {
 		props: ['books', 'authors_data'],
@@ -65,7 +57,7 @@
 		data() {
 			return {
 				modal: null,
-				book: null
+				book: {}
 			}
 		},
 		mounted() {
@@ -83,9 +75,18 @@
 			openModal() {
 				this.modal.show()
 			},
-			closeModal() {
-				this.modal.hide()
-				window.location.reload()
+			editBook(book) {
+				this.book = book
+				this.openModal()
+			},
+			async deleteBook({ id }) {
+				if (!await deleteMessage()) return
+				try {
+					await axios.delete(`/books/${id}`)
+					await successMessage({ is_delete: true, reload: true })
+				} catch (error) {
+					console.error(error)
+				}
 			}
 		}
 	}
