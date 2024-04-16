@@ -14,8 +14,23 @@
 					<div class="modal-body">
 						<section class="row">
 
+							<!-- Image, preview -->
+							<div class="col-12 d-flex justify-content-center mt-1">
+								<img :src="image_preview" alt="Imagen Libro" class="img-thumbnail" width="170" height="170">
+							</div>
+
+							<!-- Load Image -->
+							<div class="col-12 mt-1 ">
+								<label for="file" class="form-label">Imagen</label>
+								<input type="file" :class="`form-control ${back_errors['file'] ? 'is-invalid' : ''}`"
+									id="file" accept="image/*" @change="previewImage">
+								<span class="invalid-feedback" v-if="back_errors['file']">
+									{{ back_errors['file'] }}
+								</span>
+							</div>
+
 							<!-- Title -->
-							<div class="col-12">
+							<div class="col-12 mt-2">
 								<label for="title">Título</label>
 								<Field name="title" v-slot="{ errorMessage, field }" v-model="book.title">
 									<input type="text" id="title" v-model="book.title" :class="`form-control ${errorMessage || back_errors['title'] ? 'is-invalid' : ''}`" v-bind="field">
@@ -94,6 +109,7 @@
 				this.is_create = false
 				this.author = this.book.author_id
 				this.category = this.book.category_id
+				this.image_preview = this.book.file.route
 			}
 		},
 		computed: {
@@ -115,7 +131,9 @@
 				category: null,
 				categories_data: [],
 				load_category: false,
-				back_errors: {}
+				back_errors: {},
+				file: null,
+				image_preview: '/storage/images/books/default.png'
 			}
 		},
 		created() {
@@ -125,16 +143,29 @@
 			index() {
 				this.getCategories()
 			},
+			previewImage(event) {
+				this.file = event.target.files[0]
+				this.image_preview = URL.createObjectURL(this.file)
+			},
 			async saveBook() {
 				try {
 					this.book.category_id = this.category
 					this.book.author_id = this.author
-					if (this.is_create) await axios.post('/books', this.book)
-					else await axios.put(`/books/${this.book.id}`, this.book)
+					const book = this.createFormData(this.book)
+					if (this.is_create) await axios.post('/books/store', book)
+					else await axios.post(`/books/update/${this.book.id}`, book)
 					await successMessage({ reload: true })
 				} catch (error) {
 					this.back_errors = await handlerErrors(error)
 				}
+			},
+			createFormData(data) {
+				const form_data = new FormData()
+				if (this.file) form_data.append('file', this.file, this.file.name)
+				for (const prop in data) {
+					form_data.append(prop, data[prop])
+				}
+				return form_data
 			},
 			async getCategories() {
 				try {
@@ -149,9 +180,12 @@
 				this.is_create = true
 				this.book = {}
 				this.author = null
-				this.category = null,
-				this.$parent.book = {},
-				this.back_errors = {},
+				this.category = null
+				this.$parent.book = {}
+				this.back_errors = {}
+				this.file = null
+				this.image_preview = '/storage/images/books/default.png'
+				document.getElementById('file').value= ''
 				setTimeout(() => this.$refs.form.resetForm(), 100)
 			}
 		}
