@@ -46,48 +46,48 @@
 </template>
 
 <script>
-	import BookModal from './BookModal.vue'
-	import { deleteMessage, successMessage } from '@/helpers/Alerts.js'
+import BookModal from './BookModal.vue'
+import { deleteMessage, successMessage } from '@/helpers/Alerts.js'
 
-	export default {
-		props: ['books', 'authors_data'],
-		components: {
-			BookModal
+export default {
+	props: ['books', 'authors_data'],
+	components: {
+		BookModal
+	},
+	data() {
+		return {
+			modal: null,
+			book: {}
+		}
+	},
+	mounted() {
+		this.index()
+	},
+	methods: {
+		async index() {
+			$('#book_table').DataTable()
+			const modal_id = document.getElementById('book_modal')
+			this.modal = new bootstrap.Modal(modal_id)
+			modal_id.addEventListener('hidden.bs.modal', e => {
+				this.$refs.book_modal.reset()
+			})
 		},
-		data() {
-			return {
-				modal: null,
-				book: {}
-			}
+		openModal() {
+			this.modal.show()
 		},
-		mounted() {
-			this.index()
+		editBook(book) {
+			this.book = book
+			this.openModal()
 		},
-		methods: {
-			async index() {
-				$('#book_table').DataTable()
-				const modal_id = document.getElementById('book_modal')
-				this.modal = new bootstrap.Modal(modal_id)
-				modal_id.addEventListener('hidden.bs.modal', e => {
-					this.$refs.book_modal.reset()
-				})
-			},
-			openModal() {
-				this.modal.show()
-			},
-			editBook(book) {
-				this.book = book
-				this.openModal()
-			},
-			async deleteBook({ id }) {
-				if (!await deleteMessage()) return
-				try {
-					await axios.delete(`/books/${id}`)
-					await successMessage({ is_delete: true, reload: true })
-				} catch (error) {
-					console.error(error)
-				}
+		async deleteBook({ id }) {
+			if (!await deleteMessage()) return
+			try {
+				await axios.delete(`/books/${id}`)
+				await successMessage({ is_delete: true, reload: true })
+			} catch (error) {
+				console.error(error)
 			}
 		}
 	}
+}
 </script>

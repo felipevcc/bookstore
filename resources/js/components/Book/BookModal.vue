@@ -7,6 +7,7 @@
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 
+				<!-- Backend Errors -->
 				<backend-error :errors="back_errors" />
 
 				<!-- Form -->
@@ -82,7 +83,7 @@
 
 					<!-- Buttons -->
 					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
 						<button type="submit" class="btn btn-primary">Enviar</button>
 					</div>
 				</Form>
@@ -92,104 +93,104 @@
 </template>
 
 <script>
-	import { Field, Form } from 'vee-validate'
-	import * as yup from 'yup'
-	import { successMessage, handlerErrors } from '@/helpers/Alerts.js'
+import { Field, Form } from 'vee-validate'
+import * as yup from 'yup'
+import { successMessage, handlerErrors } from '@/helpers/Alerts.js'
 
-	export default {
-		props: ['authors_data', 'book_data'],
-		components: {
-			Field,
-			Form
+export default {
+	props: ['authors_data', 'book_data'],
+	components: {
+		Field,
+		Form
+	},
+	watch: {
+		book_data(new_value) {
+			this.book = { ...new_value }
+			if (!this.book.id) return
+			this.is_create = false
+			this.author = this.book.author_id
+			this.category = this.book.category_id
+			this.image_preview = this.book.file.route
+		}
+	},
+	computed: {
+		schema() {
+			return yup.object({
+				title: yup.string().required(),
+				stock: yup.number().required().positive().integer(),
+				description: yup.string(),
+				author: yup.string().required(),
+				category: yup.string().required()
+			})
+		}
+	},
+	data() {
+		return {
+			is_create: true,
+			book: {},
+			author: null,
+			category: null,
+			categories_data: [],
+			load_category: false,
+			back_errors: {},
+			file: null,
+			image_preview: '/storage/images/books/default.png'
+		}
+	},
+	created() {
+		this.index()
+	},
+	methods: {
+		index() {
+			this.getCategories()
 		},
-		watch: {
-			book_data(new_value) {
-				this.book = { ...new_value }
-				if (!this.book.id) return
-				this.is_create = false
-				this.author = this.book.author_id
-				this.category = this.book.category_id
-				this.image_preview = this.book.file.route
+		previewImage(event) {
+			this.file = event.target.files[0]
+			this.image_preview = URL.createObjectURL(this.file)
+		},
+		async saveBook() {
+			try {
+				this.book.category_id = this.category
+				this.book.author_id = this.author
+				const book = this.createFormData(this.book)
+				if (this.is_create) await axios.post('/books/store', book)
+				else await axios.post(`/books/update/${this.book.id}`, book)
+				await successMessage({ reload: true })
+			} catch (error) {
+				this.back_errors = await handlerErrors(error)
 			}
 		},
-		computed: {
-			schema() {
-				return yup.object({
-					title: yup.string().required(),
-					stock: yup.number().required().positive().integer(),
-					description: yup.string(),
-					author: yup.string().required(),
-					category: yup.string().required()
-				})
+		createFormData(data) {
+			const form_data = new FormData()
+			if (this.file) form_data.append('file', this.file, this.file.name)
+			for (const prop in data) {
+				form_data.append(prop, data[prop])
+			}
+			return form_data
+		},
+		async getCategories() {
+			try {
+				const { data: { categories } } = await axios.get('/categories/get-all')
+				this.categories_data = categories
+				this.load_category = true
+			} catch (error) {
+				await handlerErrors(error)
 			}
 		},
-		data() {
-			return {
-				is_create: true,
-				book: {},
-				author: null,
-				category: null,
-				categories_data: [],
-				load_category: false,
-				back_errors: {},
-				file: null,
-				image_preview: '/storage/images/books/default.png'
-			}
-		},
-		created() {
-			this.index()
-		},
-		methods: {
-			index() {
-				this.getCategories()
-			},
-			previewImage(event) {
-				this.file = event.target.files[0]
-				this.image_preview = URL.createObjectURL(this.file)
-			},
-			async saveBook() {
-				try {
-					this.book.category_id = this.category
-					this.book.author_id = this.author
-					const book = this.createFormData(this.book)
-					if (this.is_create) await axios.post('/books/store', book)
-					else await axios.post(`/books/update/${this.book.id}`, book)
-					await successMessage({ reload: true })
-				} catch (error) {
-					this.back_errors = await handlerErrors(error)
-				}
-			},
-			createFormData(data) {
-				const form_data = new FormData()
-				if (this.file) form_data.append('file', this.file, this.file.name)
-				for (const prop in data) {
-					form_data.append(prop, data[prop])
-				}
-				return form_data
-			},
-			async getCategories() {
-				try {
-					const { data: { categories } } = await axios.get('/categories/get-all')
-					this.categories_data = categories
-					this.load_category = true
-				} catch (error) {
-					await handlerErrors(error)
-				}
-			},
-			reset() {
-				this.is_create = true
-				this.book = {}
-				this.author = null
-				this.category = null
-				this.$parent.book = {}
-				this.back_errors = {}
-				this.file = null
-				this.image_preview = '/storage/images/books/default.png'
-				document.getElementById('file').value= ''
-				setTimeout(() => this.$refs.form.resetForm(), 100)
-			}
+		reset() {
+			this.is_create = true
+			this.book = {}
+			this.author = null
+			this.category = null
+			this.$parent.book = {}
+			this.back_errors = {}
+			this.file = null
+			this.image_preview = '/storage/images/books/default.png'
+			document.getElementById('file').value= ''
+			setTimeout(() => this.$refs.form.resetForm(), 100)
 		}
 	}
+}
 </script>
 
 <style lang='scss' scoped>

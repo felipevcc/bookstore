@@ -16,14 +16,14 @@ class BookController extends Controller
 
 	public function home()
 	{
-		$books = Book::with('author', 'category', 'file')->get();
+		$books = Book::with('author', 'category', 'file')->whereHas('category')->where('stock', '>', 0)->get();
 		return view('index', compact('books'));
 	}
 
 	public function index(Request $request)
 	{
 		$authors = Author::get();
-		$books = Book::with('author', 'category', 'file')->get();
+		$books = Book::with('author', 'category', 'file')->whereHas('category')->get();
 		if (!$request->ajax()) return view('books.index', compact('books', 'authors'));
 		return response()->json(['books' => $books], 200);
 	}

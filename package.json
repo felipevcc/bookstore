@@ -11,8 +11,8 @@
 		"@vitejs/plugin-vue": "^4.5.0",
 		"axios": "^1.1.2",
 		"bootstrap": "^5.2.3",
-		"datatables.net-bs5": "^1.13.1",
-		"datatables.net-buttons-bs5": "^2.3.3",
+		"datatables.net-bs5": "^1.13.11",
+		"datatables.net-buttons-bs5": "^2.4.3",
 		"datatables.net-select-bs5": "^1.5.0",
 		"jquery": "^3.6.1",
 		"laravel-vite-plugin": "^0.7.2",
@@ -27,6 +27,8 @@
 		"vue-select": "^4.0.0-beta.6"
 	},
 	"dependencies": {
+		"jszip": "^3.10.1",
+		"pdfmake": "^0.2.10",
 		"vee-validate": "^4.12.6",
 		"yup": "^1.4.0"
 	}
