@@ -36,7 +36,6 @@ export default {
 		const table = ref(null)
 		const category = ref(null)
 		const { openModal, closeModal, load_modal } = HandlerModal()
-		const categories = ref(null)
 
 		onMounted(() => index())
 
@@ -60,14 +59,16 @@ export default {
 						orderable: false,
 						searchable: false,
 						render: (data, type, row, meta) => {
-							return `<div class="d-flex justify-content-center" data-role='actions'>
-					<button onclick='event.preventDefault();' data-id='${row.id}' role='edit' class="btn btn-warning btn-sm">
-						<i class='fas fa-pencil-alt' data-id='${row.id}' role='edit'></i>
-								</button>
-					<button onclick='event.preventDefault();' data-id='${row.id}' role='delete' class="btn btn-danger btn-sm ms-1">
-						<i class='fas fa-trash-alt' data-id='${row.id}' role='delete'></i>
-								</button>
-					</div>`
+							return `
+								<div class="d-flex justify-content-center" data-role='actions'>
+									<button onclick='event.preventDefault();' data-id='${row.id}' role='edit' class="btn btn-warning btn-sm">
+										<i class='fa-solid fa-pencil' data-id='${row.id}' role='edit'></i>
+									</button>
+									<button onclick='event.preventDefault();' data-id='${row.id}' role='delete' class="btn btn-danger btn-sm ms-1">
+										<i class='fa-solid fa-trash-can' data-id='${row.id}' role='delete'></i>
+									</button>
+								</div>
+							`
 						}
 					}
 				]
@@ -75,7 +76,8 @@ export default {
 		}
 
 		const handleAction = (event) => {
-			const button = event.target // target is the button
+			const button = event.target.closest('[role]');
+			if (!button) return;
 			const category_id = button.getAttribute('data-id')
 
 			if (button.getAttribute('role') == 'edit') {
@@ -119,7 +121,6 @@ export default {
 		}
 
 		return {
-			categories,
 			category,
 			load_modal,
 			editCategory,
