@@ -45,7 +45,7 @@ class CategoryController extends Controller
 	public function destroy(Request $request, Category $category)
 	{
 		$category->delete();
-		if (!$request->ajax()) return back()->with('success', 'User deleted successfully');
+		if (!$request->ajax()) return back()->with('success', 'Category deleted successfully');
 		return response()->json([], 204);
 	}
 }
