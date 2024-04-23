@@ -61,7 +61,7 @@ export default {
 				} else {
 					await axios.put(`/categories/${category.value.id}`, category.value)
 				}
-				successMessage({}).then(() => successResponse())
+				await successMessage({}).then(() => successResponse())
 			} catch (error) {
 				back_errors.value = await handlerErrors(error)
 			}

@@ -164,6 +164,7 @@ export default {
 			const form_data = new FormData()
 			if (this.file) form_data.append('file', this.file, this.file.name)
 			for (const prop in data) {
+				if (prop == 'file') continue
 				form_data.append(prop, data[prop])
 			}
 			return form_data
