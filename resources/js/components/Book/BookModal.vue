@@ -62,7 +62,7 @@
 							<div class="col-12 mt-2">
 								<Field name="author" v-slot="{ errorMessage, field }" v-model="author">
 									<label for="author">Autor</label>
-									<v-select :options="authors_data" label="name" v-model="author" :reduce="author => author.id" v-bind="field" placeholder="Seleccione autor" :clearable="false" :class="`${errorMessage || back_errors['author_id'] ? 'is-invalid' : ''}`">
+									<v-select :options="authors_data" label="name" v-model="author" :reduce="author => author.id" v-bind="field" placeholder="Seleccione el autor" :clearable="false" :class="`${errorMessage || back_errors['author_id'] ? 'is-invalid' : ''}`">
 									</v-select>
 									<span class="invalid-feedback">{{ errorMessage }}</span>
 								</Field>
@@ -72,7 +72,7 @@
 							<div class="col-12 mt-2" v-if="load_category">
 								<Field name="category" v-slot="{ errorMessage, field, valid }" v-model="category">
 									<label for="category">Categoría</label>
-									<v-select id="category" :options="categories_data" v-model="category" :reduce="category => category.id" v-bind="field" label="name" placeholder="Selecciona categoria" :clearable="false" :class="`${errorMessage || back_errors['category_id'] ? 'is-invalid' : ''}`">
+									<v-select id="category" :options="categories_data" v-model="category" :reduce="category => category.id" v-bind="field" label="name" placeholder="Seleccione la categoría" :clearable="false" :class="`${errorMessage || back_errors['category_id'] ? 'is-invalid' : ''}`">
 									</v-select>
 									<span class="invalid-feedback" v-if="!valid">{{ errorMessage }}</span>
 

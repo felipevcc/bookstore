@@ -8,7 +8,7 @@ export default function handlerModal() {
 	const mountModal = async (status = true) => {
 		return await new Promise((resolve, reject) => {
 			load_modal.value = status
-			// Wait 200 milliseconds and scramble the promise
+			// Wait 200 milliseconds and resolve the promise
 			setTimeout(() => resolve(), 200)
 		})
 	}
